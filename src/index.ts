@@ -1,6 +1,7 @@
-import express, { Application } from "express";
+import express from 'express';
 import indexRoutes from "./routes/index";
-const app: Application = express();
+import router from "./routes/index";
+const app = express();
 
 // middlewares
 app.use(express.json());

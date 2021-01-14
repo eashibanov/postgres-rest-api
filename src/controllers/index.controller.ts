@@ -1,11 +1,33 @@
 import { Request, Response } from 'express';
 import { pool } from '../database';
 import { QueryResult } from 'pg';
+import {as} from "pg-promise";
 
+const pgp = require('pg-promise')();
+
+const db = pgp({
+    host: 'localhost',
+    port: '55432',
+    database: 'phonebook',
+    user: 'api',
+    password: 'apipassword'
+})
+
+export const getUsers = async (req: Request, res: Response) => {
+    let data = db.manyOrNone('SELECT * FROM people');
+    res.send(data);
+}
+
+export const testConnection = async (req: Request, res: Response) => {
+    res.send('ping\n');
+}
+
+/*
 export const getUsers = async (req: Request, res: Response): Promise<Response> => {
     try {
         const response: QueryResult = await
             pool.query('SELECT * FROM people ORDER BY id ASC');
+        res.send('hey');
         return res.status(200).json(response.rows);
     } catch (e) {
         console.log(e);
@@ -49,3 +71,4 @@ export const deleteUser = async (req: Request, res: Response) => {
     ]);
     res.json(`User ${id} deleted Successfully`);
 };
+*/
