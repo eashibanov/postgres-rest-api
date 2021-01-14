@@ -1,15 +1,17 @@
 import express from 'express';
-import indexRoutes from "./routes/index";
 import router from "./routes/index";
+
+var bodyParser = require('body-parser')
 const app = express();
 
-const bodyParser = require('body-parser')
 // middlewares
+// parse application/json
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
-app.use(indexRoutes);
+app.use(router);
 
 app.listen(3000);
 console.log('Server on port', 3000);

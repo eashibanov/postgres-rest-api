@@ -13,6 +13,8 @@ const db = pgp({
     password: 'apipassword'
 })
 
+
+
 export const getUsers = async (req: Request, res: Response) => {
     let data = await db.manyOrNone('SELECT * FROM people');
     res.send(data);
@@ -26,9 +28,9 @@ export const getUserById = async (req: Request, res: Response) => {
 };
 
 export const createUser = async (req: Request, res: Response) => {
-    const { name, phone } = await req.body;
+    const { name, phone } = req.body;
     await db.none('INSERT INTO people (name, phone) VALUES ($1, $2)', [name, phone]);
-    res.send(`Insert successful ${req.body[0]}`);
+    res.send(`Insert successful ${name}`);
 };
 
 export const updateUser = async (req: Request, res: Response) => {

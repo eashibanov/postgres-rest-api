@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "ts-node ./src/index.ts",
+    "dev": "nodemon -e ts && ts-node ./src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
@@ -12,6 +12,7 @@
   "author": "",
   "license": "",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "npm-run-all": "^4.1.5",
     "pg": "^7.12.1",
