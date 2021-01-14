@@ -2,8 +2,8 @@ import { Pool } from 'pg';
 
 export const pool = new Pool({
     user: 'api',
-    host: 'localhost',
+    host: '127.0.0.1',
     password: 'apipassword',
     database: 'people',
-    port: 5432
+    port: 55432
 });
