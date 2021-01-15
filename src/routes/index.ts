@@ -1,13 +1,60 @@
-import { Request, Response, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import { ApiController } from "../controllers/index.controller";
 
 const router = Router();
 
-router.get('/test', ApiController.testConnection);
-router.get('/users', ApiController.getUsers);
-router.get('/users/:id', ApiController.getUserById);
-router.post('/users', ApiController.createUser);
-router.put('/users/:id', ApiController.updateUser)
-router.delete('/users/:id', ApiController.deleteUser);
+router.get('/test', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        let result = await ApiController.testConnection(req, res);
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get('/users', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        let result = await ApiController.getUsers(req, res);
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get('/users/:id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        let result = await ApiController.getUserById(req, res);
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.post('/users', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        let result = await ApiController.createUser(req, res);
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.put('/users/:id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        let result = await ApiController.updateUser(req, res);
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
+})
+
+router.delete('/users/:id', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        let result = await ApiController.deleteUser(req, res);
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
+});
 
 export default router;

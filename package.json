@@ -2,16 +2,17 @@
   "name": "node-postgresql-restapi",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
   "scripts": {
     "dev": "nodemon -e ts && ts-node ./src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "",
   "dependencies": {
+    "@curveball/http-errors": "^0.3.0",
     "body-parser": "^1.19.0",
     "bunyan": "^1.8.15",
     "express": "^4.17.1",
