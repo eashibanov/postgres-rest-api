@@ -1,59 +1,70 @@
 import { Request, Response } from 'express';
-import { pool } from '../database';
-import { QueryResult } from 'pg';
-import {as} from "pg-promise";
+import { ApiModel } from '../models/api-model';
+import { User } from '../types/User'
+import { UserId } from '../types/UserId'
 
-const pgp = require('pg-promise')();
+export class ApiController {
 
-const db = pgp({
-    host: 'localhost',
-    port: '55432',
-    database: 'phonebook',
-    user: 'api',
-    password: 'apipassword'
-})
+    static async getUsers(req: Request, res: Response): Promise<User[]> {
+        try {
+            let data = await ApiModel.getAllUsers();
+            res.send(data);
+            return data;
+        } catch (err) {
+            res.send('Server error!');
+            return [];
+        }
+    }
 
+    static async getUserById(req: Request, res: Response): Promise<User> {
+        try {
+            const id = parseInt(req.params.id);
+            let data = await ApiModel.getUserById({id})
+            res.send(`User id:${id}: name: ${data.name}, phone: ${data.phone}`);
+            return data;
+        } catch (err) {
+            res.send('Server error!');
+            return {name: "", phone: ""};
+        }
+    };
 
+    static async createUser(req: Request, res: Response): Promise<UserId> {
+        try {
+            let data = await ApiModel.createUser(req.body)
+            res.send(`Insert successful, ${data.id} inserted`);
+            return data;
+        } catch (err) {
+            res.send('Server error!');
+            return {id: -1};
+        }
+    };
 
-export const getUsers = async (req: Request, res: Response) => {
-    let data = await db.manyOrNone('SELECT * FROM people');
-    res.send(data);
+    static async updateUser(req: Request, res: Response): Promise<UserId> {
+        try {
+            const id = parseInt(req.params.id);
+            let data = await ApiModel.updateUser({id}, req.body);
+            res.send(`User ${data.id} Updated Successfully:\n`);
+            return data;
+        } catch (err) {
+            res.send('Server error!');
+            return {id: -1}
+        }
+    };
+
+    static async deleteUser(req: Request, res: Response): Promise<UserId> {
+        try {
+            const id = parseInt(req.params.id);
+            let data = await ApiModel.deleteUser({id});
+            res.send(`User ${id} deleted Successfully`);
+            return data;
+        } catch (err) {
+            res.send('Server error!');
+            return {id: -1}
+        }
+    };
+
+    static async testConnection(req: Request, res: Response) {
+        res.send('ping\n');
+        return 'ping';
+    }
 }
-
-export const getUserById = async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    let data = await db.manyOrNone('SELECT * FROM people WHERE id = $1', [id]);
-    res.send(data);
-    //return res.json(response.rows);
-};
-
-export const createUser = async (req: Request, res: Response) => {
-    const { name, phone } = req.body;
-    await db.none('INSERT INTO people (name, phone) VALUES ($1, $2)', [name, phone]);
-    res.send(`Insert successful ${name}`);
-};
-
-export const updateUser = async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    const { name, phone } = req.body;
-
-    await db.none('UPDATE people SET name = $1, phone = $2 WHERE id = $3', [
-        name,
-        phone,
-        id
-    ]);
-    res.send('User Updated Successfully');
-};
-
-export const deleteUser = async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
-    await db.result('DELETE FROM people where id = $1', [
-        id
-    ]);
-    res.send(`User ${id} deleted Successfully`);
-};
-
-export const testConnection = async (req: Request, res: Response) => {
-    res.send('ping\n');
-}
-

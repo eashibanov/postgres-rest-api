@@ -1,7 +1,7 @@
 import express from 'express';
 import router from "./routes/index";
 
-var bodyParser = require('body-parser')
+let bodyParser = require('body-parser')
 const app = express();
 
 // middlewares

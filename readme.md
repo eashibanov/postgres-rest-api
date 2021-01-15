@@ -1,22 +1,22 @@
-Запуск DB Docker:
+Launch Docker DB:
 sh api-db.sh build
 sh api-db start
 
-Запуск сервера:
+Launch server:
 npm run dev
 
 Routes: 
 
 GET
-/test - проверка сервера (возращает ping)
-/users - перечисляет персон в списке
-/users/id - возвращает персону с id = id
+/test - check server (returns ping)
+/users - lists all people in a table
+/users/id - returns a person with id = id
 
 POST
-/users (body запроса - JSON { "name": ..., "phone": "x-xxx-xxx-xx-xx" }) - добавляет ползователя
+/users (request body is a JSON { "name": ..., "phone": "x-xxx-xxx-xx-xx" }) - adds a user
 
 PUT 
-/users/id, body аналогично прошлому, изменяет параметры пользователя с id = id
+/users/id, (request body is a JSON { "name": ..., "phone": "x-xxx-xxx-xx-xx" }) - adds a user with id = id
 
 DELETE
-/users/id - удаляет пользователя с id = id
+/users/id - removes a user with id = id
