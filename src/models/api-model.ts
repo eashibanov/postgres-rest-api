@@ -1,10 +1,12 @@
 import {User} from "../types/User";
 import {UserId} from "../types/UserId";
+import * as Config from '../config/config.json';
+
 const pgp = require('pg-promise')();
 
 const db = pgp({
     host: 'localhost',
-    port: '55432',
+    port: Config.dbPort || '55432',
     database: 'phonebook',
     user: 'api',
     password: 'apipassword'

@@ -1,8 +1,4 @@
---CREATE USER postgres;
 CREATE DATABASE phonebook;
---GRANT ALL PRIVILEGES ON DATABASE docker TO phonebook;
-
---\l
 
 \c phonebook;
 

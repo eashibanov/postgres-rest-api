@@ -12,11 +12,9 @@ export class ApiController {
     static async getUsers(req: Request, res: Response): Promise<User[]> {
         try {
             let data = await ApiModel.getAllUsers();
-            //res.send(data);
             return data;
         } catch (err) {
             httpErr.message = err.message;
-            //res.send('Server error!');
             throw httpErr;
         }
     }
@@ -25,11 +23,9 @@ export class ApiController {
         try {
             const id = parseInt(req.params.id);
             let data = await ApiModel.getUserById({id})
-            //res.send(data);
             return data;
         } catch (err) {
             httpErr.message = err.message;
-            //res.send('Server error!');
             throw httpErr;
         }
     };
@@ -37,11 +33,9 @@ export class ApiController {
     static async createUser(req: Request, res: Response): Promise<UserId> {
         try {
             let data = await ApiModel.createUser(req.body)
-            //res.send(data);
             return data;
         } catch (err) {
             httpErr.message = err.message;
-            //res.send('Server error!');
             throw httpErr;
         }
     };
@@ -50,11 +44,9 @@ export class ApiController {
         try {
             const id = parseInt(req.params.id);
             let data = await ApiModel.updateUser({id}, req.body);
-            //res.send(data);
             return data;
         } catch (err) {
             httpErr.message = err.message;
-            //res.send('Server error!');
             throw httpErr;
         }
     };
@@ -63,17 +55,14 @@ export class ApiController {
         try {
             const id = parseInt(req.params.id);
             let data = await ApiModel.deleteUser({id});
-            //res.send(data);
             return data;
         } catch (err) {
             httpErr.message = err.message;
-            //res.send('Server error!');
             throw httpErr;
         }
     };
 
     static async testConnection(req: Request, res: Response) {
-        //res.send({message:'ping'});
         return {message:'ping'};
     }
 }
