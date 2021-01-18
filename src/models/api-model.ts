@@ -5,11 +5,11 @@ import * as Config from '../config/config.json';
 const pgp = require('pg-promise')();
 
 const db = pgp({
-    host: process.env.HOST_URL || 'localhost',
+    host: process.env.HOST_URL || Config.host,
     port: process.env.PROXY_PORT || Config.dbPort,
-    database: process.env.DB_NAME || 'phonebook',
-    user: process.env.DB_USER || 'api',
-    password: process.env.DB_PASS || 'apipassword'
+    database: process.env.DB_NAME || Config.database,
+    user: process.env.DB_USER || Config.user,
+    password: process.env.DB_PASS || Config.password
 })
 
 export class ApiModel {

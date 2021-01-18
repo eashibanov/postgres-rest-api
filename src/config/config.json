@@ -1,4 +1,8 @@
 {
   "appPort": 4321,
-  "dbPort": 55432
+  "dbPort": 55432,
+  "host": "localhost",
+  "database": "phonebook",
+  "user": "api",
+  "password": "apipassword"
 }
