@@ -69,4 +69,3 @@ module.exports = (logger: Logger): Router => {
     LOGGER = logger;
     return router;
 };
-//export default router;
