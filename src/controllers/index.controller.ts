@@ -6,24 +6,26 @@ import { HttpErrorBase } from "@curveball/http-errors";
 import Ajv, { JSONSchemaType } from "ajv";
 import pgPromise from "pg-promise";
 import QueryResultError = pgPromise.errors.QueryResultError;
+import {queryErr} from "../errors/queryErr";
 
 const ajv = new Ajv();
 let httpErr = new HttpErrorBase();
+httpErr.httpStatus = 500;
 
 const schemaUser: JSONSchemaType<User> = {
     type: "object",
     properties: {
-        "name": { type: "string"},
-        "phone": { type: "string", maxLength: 15, minLength: 15 }
+        name: { type: "string"},
+        phone: { type: "string", maxLength: 15, minLength: 15 },
     },
-    required: ["name"],
+    required: ["name", "phone"],
     additionalProperties: false,
 }
 
 const schemaId: JSONSchemaType<UserId> = {
     type: "object",
     properties: {
-        "id": { type: "number", minimum: 1 }
+        id: { type: "number", minimum: 1 },
     },
     required: ["id"],
     additionalProperties: false,
@@ -42,9 +44,10 @@ export class ApiController {
             if (err instanceof QueryResultError) {
                 res.status(404);
                 httpErr.httpStatus = 404;
-                httpErr.title = 'Invalid query'
+                httpErr.message = err.message;
             }
-            httpErr.message = err.message;
+            else
+                httpErr.message = 'Internal error';
             throw httpErr;
         }
     }
@@ -53,7 +56,7 @@ export class ApiController {
         try {
             const id = parseInt(req.params.id);
             if (!validateId( { id }))
-                throw new QueryResultError('ID is invalid');
+                throw new QueryResultError();
 
             let data = await ApiModel.getUserById({id});
             return data;
@@ -61,9 +64,10 @@ export class ApiController {
             if (err instanceof QueryResultError) {
                 res.status(404);
                 httpErr.httpStatus = 404;
-                httpErr.title = 'Invalid query params'
+                httpErr.message = 'ID is invalid';
             }
-            httpErr.message = err.type;
+            else
+                httpErr.message = 'Internal error';
             throw httpErr;
         }
     };
@@ -71,17 +75,18 @@ export class ApiController {
     static async createUser(req: Request, res: Response): Promise<UserId> {
         try {
             if (!validateUser(req.body))
-                throw new QueryResultError('JSON is invalid');
+                throw new queryErr();
 
             let data = await ApiModel.createUser(req.body)
             return data;
         } catch (err) {
-            if (err instanceof QueryResultError) {
+            if (err instanceof queryErr) {
                 res.status(400);
                 httpErr.httpStatus = 400;
-                httpErr.title = 'Invalid query'
+                httpErr.message = 'JSON body is invalid';
             }
-            httpErr.message = err.message;
+            else
+                httpErr.message = 'Internal error'
             throw httpErr;
         }
     };
@@ -90,17 +95,26 @@ export class ApiController {
         try {
             const id = parseInt(req.params.id);
             if (!validateId( { id }))
-                throw new QueryResultError('ID is invalid');
+                throw new QueryResultError();
+
+            if (!validateUser(req.body))
+                throw new queryErr();
 
             let data = await ApiModel.updateUser({id}, req.body);
             return data;
         } catch (err) {
             if (err instanceof QueryResultError) {
+                res.status(404);
+                httpErr.httpStatus = 404;
+                httpErr.message = 'ID is invalid';
+            }
+            if (err instanceof queryErr) {
                 res.status(400);
                 httpErr.httpStatus = 400;
-                httpErr.title = 'Invalid query'
+                httpErr.message = 'JSON body is invalid';
             }
-            httpErr.message = err.message;
+            else
+                httpErr.message = 'Internal error';
             throw httpErr;
         }
     };
@@ -109,7 +123,7 @@ export class ApiController {
         try {
             const id = parseInt(req.params.id);
             if (!validateId( { id }))
-                throw new QueryResultError('ID is invalid');
+                throw new QueryResultError();
 
             let data = await ApiModel.deleteUser({id});
             return data;
@@ -117,9 +131,10 @@ export class ApiController {
             if (err instanceof QueryResultError) {
                 res.status(404);
                 httpErr.httpStatus = 404;
-                httpErr.title = 'Invalid query'
+                httpErr.message = 'ID is invalid';
             }
-            httpErr.message = err.message;
+            else
+                httpErr.message = 'Internal error';
             throw httpErr;
         }
     };
