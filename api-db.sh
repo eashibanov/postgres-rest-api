@@ -1,5 +1,4 @@
 IMAGE_NAME=api-db
-
 DB_PORT="${PROXY_PORT:-55432}"
 SCRIPT_PATH=$(dirname $(realpath -s $0))
 
