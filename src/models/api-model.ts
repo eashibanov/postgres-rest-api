@@ -6,7 +6,7 @@ const pgp = require('pg-promise')();
 
 const db = pgp({
     host: 'localhost',
-    port: Config.dbPort || '55432',
+    port: process.env.PROXY_PORT || Config.dbPort,
     database: 'phonebook',
     user: 'api',
     password: 'apipassword'

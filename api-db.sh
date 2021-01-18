@@ -1,6 +1,6 @@
 IMAGE_NAME=api-db
 
-PROXY_PORT=55432
+PROXY_PORT="${DEPLOY_ENV:-55432}"
 SCRIPT_PATH=$(dirname $(realpath -s $0))
 
 case "$1" in
