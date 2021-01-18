@@ -1,6 +1,6 @@
 IMAGE_NAME=api-db
 
-PROXY_PORT="${DEPLOY_ENV:-55432}"
+DB_PORT="${PROXY_PORT:-55432}"
 SCRIPT_PATH=$(dirname $(realpath -s $0))
 
 case "$1" in
@@ -8,7 +8,7 @@ case "$1" in
                 docker build $SCRIPT_PATH/database/. -f $SCRIPT_PATH/database/Dockerfile -t $IMAGE_NAME
                 ;;
         start)
-                docker run -e POSTGRES_HOST_AUTH_METHOD=trust -d -p $PROXY_PORT:5432 --name "$IMAGE_NAME" $IMAGE_NAME
+                docker run -e POSTGRES_HOST_AUTH_METHOD=trust -d -p $DB_PORT:5432 --name "$IMAGE_NAME" $IMAGE_NAME
                 sleep 3
                 docker start $IMAGE_NAME
                 ;;
